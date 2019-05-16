@@ -4,7 +4,12 @@
   font-size: 1.2em;
 }
 
-
+.box {
+  position:absolute;
+  border:2px solid red;
+  background-color:transparent;
+  margin-left: 32%;
+}
 
 ul.links {
   padding-bottom: 20px;

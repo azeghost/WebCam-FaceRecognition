@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 import {Subject} from 'rxjs/Subject';
 import {FaceRecognitionService} from '../services/face-recognition.service';
@@ -73,7 +73,27 @@ export class WebCamComponentComponent implements OnInit {
     this.age = faceAttributes[0];
     this.gender = faceAttributes[1];
     this.smile = faceAttributes[2];
+    this.drawRectangle();
 
+  }
+
+  drawRectangle(): void
+  {
+    let canvas =<HTMLCanvasElement>  document.getElementById('myCanvas');
+    let context = canvas.getContext('2d');
+
+    let source = new Image();
+
+    source.onload = () =>
+    {
+      context.drawImage(source, 0, 0);
+      context.beginPath();
+      context.strokeStyle = 'red';
+      context.rect(this.x, this.y, this.width, this.height);
+      context.stroke();
+    };
+
+    source.src = this.webcamImage.imageAsDataUrl;
   }
 
   public toggleWebcam(): void {
