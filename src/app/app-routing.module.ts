@@ -7,9 +7,9 @@ import { TrainComponent } from './train/train.component';
 
 const routes: Routes = [
   {path: 'train', component: TrainComponent},
-  {path: 'web-cam-component', component: WebCamComponentComponent},
+  {path: 'webcam', component: WebCamComponentComponent},
   {path: 'about', component: AboutComponent},
-  {path:'', component: NavigationComponent}
+  {path: '', component: NavigationComponent}
 ];
 
 @NgModule({

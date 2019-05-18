@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 import {Subject} from 'rxjs/Subject';
 import {FaceRecognitionService} from '../services/face-recognition.service';
@@ -49,51 +49,60 @@ export class WebCamComponentComponent implements OnInit {
 
   public async triggerSnapshot(){
     this.trigger.next();
-    console.log(this.webcamImage.imageAsDataUrl);
+    this.FindFace();
+  }
 
+  public async FindFace(){
     //this.faceReco.getPersonInformation(this.webcamImage.imageAsDataUrl);
     this.PersonInfo = await this.faceReco.getPersonInformation(this.webcamImage.imageAsDataUrl).toPromise();
     console.log(this.PersonInfo);
-
-    let resources = this.PersonInfo[0];
-
-
-    let rectangleCoordinates = this.faceReco.getRectangleCoordinates(resources);
-    let faceAttributes = this.faceReco.getFaceAttributes(resources);
-
-    console.log(rectangleCoordinates);
-    console.log(faceAttributes);
+    if(this.PersonInfo.length == 1) {
+      let resources = this.PersonInfo[0];
 
 
-    this.x = rectangleCoordinates[0];
-    this.y = rectangleCoordinates[1];
-    this.width = rectangleCoordinates[2];
-    this.height = rectangleCoordinates[3];
+      let rectangleCoordinates = this.faceReco.getRectangleCoordinates(resources);
+      let faceAttributes = this.faceReco.getFaceAttributes(resources);
 
-    this.age = faceAttributes[0];
-    this.gender = faceAttributes[1];
-    this.smile = faceAttributes[2];
+      console.log(rectangleCoordinates);
+      console.log(faceAttributes);
+
+
+      this.y = rectangleCoordinates[0];
+      this.x = rectangleCoordinates[1];
+      this.width = rectangleCoordinates[2];
+      this.height = rectangleCoordinates[3];
+
+      this.age = faceAttributes[0];
+      this.gender = faceAttributes[1];
+      this.smile = faceAttributes[2];
+    }
     this.drawRectangle();
-
   }
 
-  drawRectangle(): void
-  {
-    let canvas =<HTMLCanvasElement>  document.getElementById('myCanvas');
+  drawRectangle(): void {
+    let canvas = <HTMLCanvasElement>document.getElementById('myCanvas');
     let context = canvas.getContext('2d');
 
     let source = new Image();
+    if (this.PersonInfo.length != 1) {
+      context.font = "30px Arial";
+      context.fillStyle = "black"
+      context.fillText("No Face detected", 50, 50);
 
-    source.onload = () =>
-    {
-      context.drawImage(source, 0, 0);
-      context.beginPath();
-      context.strokeStyle = 'red';
-      context.rect(this.x, this.y, this.width, this.height);
-      context.stroke();
-    };
+    } else{
+      source.onload = () => {
+        context.drawImage(source, 0, 0);
+        context.beginPath();
+        context.strokeStyle = 'red';
+        context.rect(this.x, this.y, this.width, this.height);
+        context.stroke();
+        context.font = "15px Arial";
+        context.fillStyle = "yellow"
+        context.fillText("Age " + this.age + " Gender: " + this.gender + " Smile: " + this.smile, this.x, this.y);
+      };
 
     source.src = this.webcamImage.imageAsDataUrl;
+  }
   }
 
   public toggleWebcam(): void {

@@ -1,6 +1,6 @@
 <div style="text-align:center">
   <div>
-    <webcam [height]="800" [width]="800" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam [height]="600" [width]="600" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="videoOptions"
             [imageQuality]="1"
@@ -14,20 +14,21 @@
     <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Next Webcam</button>
     <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label>
     <br/>
-    DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px">
+    DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 600px">
     <button (click)="showNextWebcam(deviceId);">Activate</button>
   </div>
 </div>
 
 <div class="snapshot" *ngIf="webcamImage">
-  <h2>Face Detected!</h2>
-
+  <h2>Last Picture!</h2>
   <img [src]="webcamImage.imageAsDataUrl"/>
-    <div id="1" class="box"></div>
-
+  <div class ="snapshot" >
+    <h2>Last Recognized Face</h2>
+  <canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;">s
+    Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
 </div>
-<canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;">s
-Your browser does not support the HTML5 canvas tag.</canvas>
+
 
 <h4 *ngIf="errors.length > 0">Messages:</h4>
 <ul *ngFor="let error of errors">
