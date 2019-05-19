@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FaceRecognitionService} from '../services/face-recognition.service';
+import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-train',
@@ -40,7 +43,6 @@ export class TrainComponent implements OnInit {
     this.data.addPersonImage(group_id, image, personID)
       .subscribe(res => { this.add_image_response = res.body }, error => console.log(error));
   }
-
   getPerson(groupID: string, personID: string){
     this.data.getPerson(groupID, personID)
       .subscribe(res => { this.get_person_response = res.body }, error => console.log(error));

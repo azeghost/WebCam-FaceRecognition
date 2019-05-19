@@ -1,0 +1,15 @@
+<div style="text-align:center">
+  <div>
+    <webcam [height]="600" [width]="600" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+            [imageQuality]="1"
+            (initError)="handleInitError($event)"
+    ></webcam>
+    <br/>
+    <button class="actionBtn" (click)="triggerSnapshot();">Get person details</button>
+  </div>
+</div>
+
+<div class="snapshot" *ngIf="webcamImage">
+  <h2>Taken pic</h2>
+  <img [src]="webcamImage.imageAsDataUrl"/>
+</div>

@@ -123,7 +123,7 @@ export class FaceRecognitionService {
       { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response'});
   }
 
-  addPersonImage(group_id: string, image: File, personID: string){
+  addPersonImage(group_id: string, image: any, personID: string){
     return this.httpClient.post<any>
     (this.person_groups_url + group_id + '/persons/' + personID + '/persistedFaces', image,
       { headers: this.getHeadersOctetStream(this.apiKey), responseType: 'json', observe:'response'});
@@ -138,6 +138,11 @@ export class FaceRecognitionService {
     return this.httpClient.post<any>(
       this.person_groups_url + group_id + '/train', {},
       { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response'});
+  }
+  faceIdentify(group_id: string, _faceId: string){
+    return this.httpClient.post<any>(
+      this.face_identify_url, { faceIds: _faceId, personGroupId: group_id },
+      { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response' });
   }
 }
 

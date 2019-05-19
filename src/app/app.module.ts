@@ -13,6 +13,8 @@ import {RouterModule} from '@angular/router';
 import { AppRoutingModule } from './/app-routing.module';
 import { AboutComponent } from './about/about.component';
 import { TrainComponent } from './train/train.component';
+import { UploadComponent } from './upload/upload.component';
+import { IdentifyComponent } from './identify/identify.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { TrainComponent } from './train/train.component';
     WebCamComponentComponent,
     AboutComponent,
     TrainComponent,
+    UploadComponent,
+    IdentifyComponent,
   ],
   imports: [FormsModule, BrowserModule, HttpClientModule, WebcamModule, RouterModule, AppRoutingModule],
   providers: [

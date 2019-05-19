@@ -28,7 +28,7 @@ export class WebCamComponentComponent implements OnInit {
   gender: string;
   age:any;
   smile:any;
-  public errors: WebcamInitError[] = [];
+   public errors: WebcamInitError[] = [];
 
   // latest snapshot
   public webcamImage: WebcamImage = null;
