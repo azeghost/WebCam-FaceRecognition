@@ -9,7 +9,18 @@
   </div>
 </div>
 
-<div class="snapshot" *ngIf="webcamImage">
+<div class="snapshot" align="center" *ngIf="webcamImage">
   <h2>Taken pic</h2>
-  <img [src]="webcamImage.imageAsDataUrl"/>
+  <canvas id="myCanvas" width="700" height="500" style="border:1px solid #d3d3d3;" align="center">s
+    Your browser does not support the HTML5 canvas tag.</canvas>
 </div>
+<td style="font-weight:bold">Enter group ID !!!First!!!</td>
+<td>
+  <input type="text" #id1 placeholder="Group ID">
+</td>
+<td>
+  <button (click)="setGroupID(id1.value)" type="button" class="btn btn-primary">select</button>
+</td>
+<td>{{matchedId | json}}</td>
+<td>{{matchedName | json}}</td>
+<td>{{matchedData | json}}</td>

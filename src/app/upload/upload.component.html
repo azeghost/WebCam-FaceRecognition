@@ -1,9 +1,10 @@
+
 <input type="URL" name="myURL" [(ngModel)]="myURL" placeholder="insert image URL here" (change)="onURLinserted() ">
-<div *ngIf="imageToShow">
-<img [src]="imageToShow" alt="Place image title">
+<div *ngIf="imageToShow" align="center">
+<img [src]="imageToShow" alt="Place image title" align="center">
 
   <button (click)="FindFace()" type="button" class="btn btn-primary">FIND a Face</button>
 
-<canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;">s
+<canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;" align="center">s
   Your browser does not support the HTML5 canvas tag.</canvas>
 </div>

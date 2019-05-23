@@ -5,9 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {WebcamModule} from 'ngx-webcam';
 import { HttpClientModule } from '@angular/common/http';
 import { NavigationComponent } from './navigation/navigation.component';
-import { BoolToYesNoPipe } from './pipes/bool-to-yes-no/bool-to-yes-no.pipe';
 import { FaceRecognitionService } from './services/face-recognition.service';
-import { TableComponent } from './table/table.component';
 import { WebCamComponentComponent } from './web-cam-component/web-cam-component.component';
 import {RouterModule} from '@angular/router';
 import { AppRoutingModule } from './/app-routing.module';
@@ -20,8 +18,6 @@ import { IdentifyComponent } from './identify/identify.component';
   declarations: [
     AppComponent,
     NavigationComponent,
-    BoolToYesNoPipe,
-    TableComponent,
     WebCamComponentComponent,
     AboutComponent,
     TrainComponent,

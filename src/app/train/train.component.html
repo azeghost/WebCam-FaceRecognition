@@ -18,6 +18,18 @@
   <td>{{create_group_response | json}}</td>
 
   <tr></tr>
+  <td>Create LargePersonGroup</td>
+  <td>
+    <input type="text" #id1 placeholder="Large Group ID">
+    <input type="text" #name1 placeholder="Large Group Name">
+    <input type="text" #data1 placeholder="userData">
+  </td>
+  <td>
+    <button (click)="createLargeGroup(id1.value, name1.value, data1.value)" type="button" class="btn btn-primary">PUT</button>
+  </td>
+  <td>{{create_group_response | json}}</td>
+
+  <tr></tr>
 
   <td>Create Person</td>
   <td>
@@ -30,7 +42,23 @@
   </td>
   <td>{{create_person_response | json}}</td>
 
+  <!--
+    <tr></tr>
+     This is a comment
+    <td>Add Person Image From webcam</td>
+    <td>
+      <input type="text" #id3 placeholder="Group ID">
+      <button (click)="toggleWebcam()"  type="button" class="btn btn-primary">Toggle Webcam</button>
+      <input type="text" #personID1 placeholder="Person ID">
+    </td>
+    <td>
+
+      <button (click)="addImageFromWebcam(id3.value,  personID1.value)" type="button" class="btn btn-primary">POST</button>
+    </td>
+    <td> {{add_image_response | json}}</td>
+    -->
   <tr></tr>
+
 
   <td>Add Person Image</td>
   <td>
@@ -42,7 +70,6 @@
     <button (click)="addImage(id3.value, person_image, personID1.value)" type="button" class="btn btn-primary">POST</button>
   </td>
   <td> {{add_image_response | json}}</td>
-
   <tr></tr>
 
   <td>Get Person</td>
@@ -70,3 +97,12 @@
 
 </table>
 
+<div *ngIf="showWebcam" align="center">
+  <webcam [height]="600" [width]="600" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+          [imageQuality]="1"
+          (initError)="handleInitError($event)"
+  ></webcam>
+  <br/>
+  <button class="actionBtn" (click)="triggerSnapshot();">Take a pic and submit</button>
+
+</div>

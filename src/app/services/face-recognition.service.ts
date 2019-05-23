@@ -1,14 +1,15 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+
 
 @Injectable()
 export class FaceRecognitionService {
 
-  private fullUrl: string = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
-  private apiUrl:string = "https://westeurope.api.cognitive.microsoft.com/face/v1.0";
-  private apiKey:string = '781b38016a3b416e84f51fe33e35f87f';
+  private fullUrl: string = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
+  private apiUrl:string = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0";
+  private apiKey:string = 'e3d57e9a94f146789d3d783743ffb08a';
   private person_groups_url:string = this.apiUrl + '/persongroups/';
+  private large_person_group_url:string = this.apiUrl + '/largepersongroups/'
   private face_identify_url:string = this.apiUrl + '/identify';
 
   constructor(private httpClient: HttpClient) { }
@@ -38,7 +39,7 @@ export class FaceRecognitionService {
     const blob = this.makeblob(base64Image);
 
     return this.httpClient.post<FaceRecognitionResponse>(
-      environment.endpoint,
+      this.apiUrl,
       blob,
       {
         params,
@@ -65,7 +66,7 @@ export class FaceRecognitionService {
   private getHeadersOctetStream(subscriptionKey: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/octet-stream');
-    headers = headers.set('Ocp-Apim-Subscription-Key', subscriptionKey);
+    headers = headers.set('Ocp-Apim-Subscription-Key', this.apiKey);
     return headers;
   }
 
@@ -116,7 +117,11 @@ export class FaceRecognitionService {
       this.person_groups_url + group_name, {name: _name, userData: _userData},
       { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response'});
   }
-
+  createLargePersonGroup(large_group_name: string, _name: string, _userData: string){
+    return this.httpClient.put<any>(
+      this.person_groups_url + large_group_name, {name: _name, userData: _userData},
+      { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response'});
+  }
   createPerson(group_id:string, _name: string, _userData: string){
     return this.httpClient.post<any>(
       this.person_groups_url + group_id + '/persons/', {name: _name, userData: _userData},
@@ -139,9 +144,9 @@ export class FaceRecognitionService {
       this.person_groups_url + group_id + '/train', {},
       { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response'});
   }
-  faceIdentify(group_id: string, _faceId: string){
+  faceIdentify(group_id: string, _faceIds: string[]){
     return this.httpClient.post<any>(
-      this.face_identify_url, { faceIds: _faceId, personGroupId: group_id },
+      this.face_identify_url, { faceIds: _faceIds, personGroupId: group_id },
       { headers: this.getHeaderJSON(), responseType: 'json', observe: 'response' });
   }
 }

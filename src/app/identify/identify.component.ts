@@ -19,7 +19,7 @@ export class IdentifyComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public errors: WebcamInitError[] = [];
 
-
+  groupID:string;
   PersonInfo:any;
   x: number = 0;
   y: number =0;
@@ -34,7 +34,6 @@ export class IdentifyComponent implements OnInit {
 
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
-  imageToShow : any;
   public  blob:Blob;
   constructor(private data: FaceRecognitionService) { }
 
@@ -44,24 +43,9 @@ export class IdentifyComponent implements OnInit {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
       });
   }
-  private makeblob(dataURL) {
-    const BASE64_MARKER = ';base64,';
-    const parts = dataURL.split(BASE64_MARKER);
-    const contentType = parts[0].split(':')[1];
-    const raw = window.atob(parts[1]);
-    const rawLength = raw.length;
-    const uInt8Array = new Uint8Array(rawLength);
-
-    for (let i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-
-    return new Blob([uInt8Array], { type: contentType });
-  }
   public async triggerSnapshot(){
     this.trigger.next();
     this.FindFace();
-    this.faceIdentify("123")
 
   }
 
@@ -75,8 +59,8 @@ export class IdentifyComponent implements OnInit {
   public handleInitError(error: WebcamInitError): void {
     this.errors.push(error);
   }
+  //finds the face sets the info ro face api responce
   public async FindFace(){
-    //this.faceReco.getPersonInformation(this.webcamImage.imageAsDataUrl);
     this.PersonInfo = await this.data.getPersonInformation(this.webcamImage.imageAsDataUrl).toPromise();
     console.log(this.PersonInfo);
     if(this.PersonInfo.length == 1) {
@@ -99,19 +83,52 @@ export class IdentifyComponent implements OnInit {
       this.gender = faceAttributes[1];
       this.smile = faceAttributes[2];
       this.faceId = resources["faceId"];
-
+      this.drawRectangle();
+      this.faceIdentify(this.groupID);
     }
+    console.log(this.groupID);
     console.log(this.faceId);
   }
-
+//call microsoft api and determine name and id
   async faceIdentify(group_id: string){
-
-    const getID = await this.data.faceIdentify(group_id, this.faceId).toPromise().then(data => this.matchedId = data.body[0].candidates[0].personId);
+    let faceIDs:string[]=[this.faceId];
+    const getID = await this.data.faceIdentify(group_id, faceIDs).toPromise().then(data =>{
+      this.matchedId = data.body[0].candidates[0].personId;
+    });
 
     const getName = await this.data.getPerson(group_id, this.matchedId ).toPromise().then(data =>
     {
       this.matchedName = data.body["name"]
       this.matchedData = data.body["userData"]
     });
+  }
+  async setGroupID(group_id: string){
+    this.groupID = group_id;
+  }
+  //draws canvas
+  drawRectangle(): void {
+    let canvas = <HTMLCanvasElement>document.getElementById('myCanvas');
+    let context = canvas.getContext('2d');
+    console.log(canvas,context);
+    let source = new Image();
+    if (this.PersonInfo.length == 0) { //checks if no face recognized
+      context.font = "30px Arial";
+      context.fillStyle = "black"
+      context.fillText("No Face detected", 50, 50);
+
+    } else{
+      source.onload = () => {
+        context.drawImage(source, 0, 0);
+        context.beginPath();
+        context.strokeStyle = 'red';
+        context.rect(this.x, this.y, this.width, this.height);
+        context.stroke();
+        context.font = "15px Arial";
+        context.fillStyle = "yellow"
+        context.fillText("Age " + this.age + " Gender: " + this.gender + " Smile: " + this.smile+"Name" + this.matchedName, this.x, this.y);
+      };
+
+      source.src = this.webcamImage.imageAsDataUrl;
+    }
   }
 }

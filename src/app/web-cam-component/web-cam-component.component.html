@@ -19,12 +19,12 @@
   </div>
 </div>
 
-<div class="snapshot" *ngIf="webcamImage">
+<div class="snapshot" *ngIf="webcamImage" align="center">
   <h2>Last Picture!</h2>
   <img [src]="webcamImage.imageAsDataUrl"/>
   <div class ="snapshot" >
     <h2>Last Recognized Face</h2>
-  <canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;">s
+  <canvas id="myCanvas" width="650" height="600" style="border:1px solid #d3d3d3;">s
     Your browser does not support the HTML5 canvas tag.</canvas>
   </div>
 </div>
